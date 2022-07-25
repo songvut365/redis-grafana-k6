@@ -15,11 +15,10 @@ import (
 func main() {
 	db := initDatabase()
 	redisClient := initRedis()
-	_ = redisClient
 
 	productRepository := repositories.NewProductRepositoryDB(db)
 	productService := services.NewCatalogService(productRepository)
-	productHandler := handlers.NewCatalogHandler(productService)
+	productHandler := handlers.NewCatalogHandlerRedis(productService, redisClient)
 
 	app := fiber.New()
 	app.Use(logger.New())
