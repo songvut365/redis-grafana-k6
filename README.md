@@ -8,8 +8,8 @@ $ go run main.go
 ```
 
 2. Start InfluxDB and Grafana and go to grafana dashboard at http://localhost:9001
-- add influxdb
-- add dashboard
+- Add influxdb
+- Add dashboard
 ```
 $ docker compose up influxdb grafana
 ```
