@@ -2,7 +2,6 @@
 
 ## How to start
 
-
 1. Run MariaDB and Redis
 ```
 $ docker compose up mariadb redis
@@ -14,8 +13,8 @@ $ go run main.go
 ```
 
 3. Start InfluxDB and Grafana and go to grafana dashboard at http://localhost:9001
-- Add influxdb
-- Add dashboard
+- Add influxdb for k6
+- Add dashboard for k6
 ```
 $ docker compose up influxdb grafana
 ```
