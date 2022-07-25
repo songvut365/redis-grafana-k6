@@ -7,7 +7,6 @@ import (
 
 	"github.com/go-redis/redis/v9"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -17,11 +16,10 @@ func main() {
 	redisClient := initRedis()
 
 	productRepository := repositories.NewProductRepositoryDB(db)
-	productService := services.NewCatalogService(productRepository)
-	productHandler := handlers.NewCatalogHandlerRedis(productService, redisClient)
+	productService := services.NewCatalogServiceRedis(productRepository, redisClient)
+	productHandler := handlers.NewCatalogHandler(productService)
 
 	app := fiber.New()
-	app.Use(logger.New())
 
 	app.Get("/products", productHandler.GetProducts)
 
