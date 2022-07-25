@@ -19,7 +19,7 @@ services:
     volumes:
       - ./data/redis:/data
       - ./config/redis.conf:/redis.conf
-    command: redis-server /redis.conf
+    command: redis-server /redis.conf --protected-mode no
 
   k6:
     image: grafana/k6
