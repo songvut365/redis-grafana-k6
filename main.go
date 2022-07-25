@@ -1,18 +1,31 @@
 package main
 
 import (
-	"time"
+	"fmt"
+	"go-redis/repositories"
 
-	"github.com/gofiber/fiber/v2"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func main() {
-	app := fiber.New()
+	db := initDatabase()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		time.Sleep(time.Millisecond * 10)
-		return c.SendString("Hello World")
-	})
+	productRepository := repositories.NewProductRepositoryDB(db)
+	products, err := productRepository.GetProducts()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(products)
+}
 
-	app.Listen(":9000")
+func initDatabase() *gorm.DB {
+	dial := mysql.Open("root:1234@tcp(localhost:3306)/store")
+	db, err := gorm.Open(dial, &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	return db
 }
