@@ -2,7 +2,7 @@
 
 ## How to start
 
-1. Run application
+1. Run application on http://localhost:9000
 ```
 $ go run main.go
 ```
