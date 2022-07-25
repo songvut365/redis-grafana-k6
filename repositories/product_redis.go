@@ -28,7 +28,7 @@ func (repository productRepositoryRedis) GetProducts() (products []product, err 
 	productsJson, err := repository.redisClient.Get(context.Background(), key).Result()
 	if err == nil {
 		err = json.Unmarshal([]byte(productsJson), &products)
-		if err != nil {
+		if err == nil {
 			return products, nil
 		}
 	}
