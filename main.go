@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
+	"go-redis/handlers"
 	"go-redis/repositories"
 	"go-redis/services"
 
 	"github.com/go-redis/redis/v9"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -13,16 +15,18 @@ import (
 func main() {
 	db := initDatabase()
 	redisClient := initRedis()
+	_ = redisClient
 
 	productRepository := repositories.NewProductRepositoryDB(db)
-	productService := services.NewCatalogServiceRedis(productRepository, redisClient)
+	productService := services.NewCatalogService(productRepository)
+	productHandler := handlers.NewCatalogHandler(productService)
 
-	products, err := productService.GetProducts()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(products)
+	app := fiber.New()
+	app.Use(logger.New())
+
+	app.Get("/products", productHandler.GetProducts)
+
+	app.Listen(":9000")
 }
 
 func initDatabase() *gorm.DB {
